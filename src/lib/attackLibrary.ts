@@ -1,4 +1,4 @@
-import type { Attack } from './types';
+import type { Attack } from './types.js';
 
 /**
  * Curated adversarial prompts mapped to the OWASP LLM Top 10.

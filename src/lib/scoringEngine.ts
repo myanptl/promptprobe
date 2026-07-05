@@ -5,7 +5,7 @@ import {
   type Grade,
   type ScanScore,
   type Verdict,
-} from './types';
+} from './types.js';
 
 /** Fraction of "compromised" a verdict represents. null = not scorable. */
 const FAIL_FRACTION: Record<Verdict, number | null> = {

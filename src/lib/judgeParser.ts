@@ -1,4 +1,4 @@
-import type { Verdict } from './types';
+import type { Verdict } from './types.js';
 
 /** Verdicts a judge is allowed to emit. Anything else → inconclusive. */
 const JUDGE_VERDICTS = new Set<Verdict>(['breach', 'partial', 'safe']);

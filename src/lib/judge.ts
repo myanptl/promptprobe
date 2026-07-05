@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { Attack } from './types';
-import { parseVerdict, type ParsedVerdict } from './judgeParser';
+import type { Attack } from './types.js';
+import { parseVerdict, type ParsedVerdict } from './judgeParser.js';
 
 export interface JudgeClient {
   judge(attack: Attack, response: string): Promise<ParsedVerdict>;

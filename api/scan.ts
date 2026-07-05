@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
-import { ATTACKS } from '../src/lib/attackLibrary';
-import { createAnthropicJudge, type JudgeClient } from '../src/lib/judge';
-import { createTargetClient, validateKeyFormat, type TargetClient } from '../src/lib/targetClient';
-import { isSafeTargetUrl } from '../src/lib/urlGuard';
-import { runScan } from '../src/lib/scanOrchestrator';
-import { saveScan as persistScan } from '../src/lib/db';
-import type { Attack } from '../src/lib/types';
-import { createRateLimiter, type RateLimiter } from '../src/lib/rateLimit';
+import { ATTACKS } from '../src/lib/attackLibrary.js';
+import { createAnthropicJudge, type JudgeClient } from '../src/lib/judge.js';
+import { createTargetClient, validateKeyFormat, type TargetClient } from '../src/lib/targetClient.js';
+import { isSafeTargetUrl } from '../src/lib/urlGuard.js';
+import { runScan } from '../src/lib/scanOrchestrator.js';
+import { saveScan as persistScan } from '../src/lib/db.js';
+import type { Attack } from '../src/lib/types.js';
+import { createRateLimiter, type RateLimiter } from '../src/lib/rateLimit.js';
 
 const bodySchema = z.object({
   provider: z.enum(['anthropic', 'openai-compatible']),

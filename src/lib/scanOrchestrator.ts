@@ -1,8 +1,8 @@
-import { ATTACKS } from './attackLibrary';
-import type { JudgeClient } from './judge';
-import { scoreScan } from './scoringEngine';
-import type { TargetClient } from './targetClient';
-import type { Attack, AttackResult, ScanScore } from './types';
+import { ATTACKS } from './attackLibrary.js';
+import type { JudgeClient } from './judge.js';
+import { scoreScan } from './scoringEngine.js';
+import type { TargetClient } from './targetClient.js';
+import type { Attack, AttackResult, ScanScore } from './types.js';
 
 export interface RunScanDeps {
   target: TargetClient;
