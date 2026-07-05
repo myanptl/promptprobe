@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { ATTACKS } from '../src/lib/attackLibrary.js';
 import { createAnthropicJudge, type JudgeClient } from '../src/lib/judge.js';
@@ -100,13 +101,17 @@ export async function handleScan(input: HandleScanInput): Promise<HandleScanResu
   return { status: 200, body: { score, results: safeResults } };
 }
 
-function clientIp(req: Request): string {
+function headerValue(v: string | string[] | undefined): string | undefined {
+  return Array.isArray(v) ? v[0] : v;
+}
+
+function clientIp(headers: VercelRequest['headers']): string {
   // Prefer Vercel's platform-generated header, which clients cannot spoof.
   // Fall back to x-forwarded-for only when it is absent.
   return (
-    req.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() ||
-    req.headers.get('x-real-ip') ||
-    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    headerValue(headers['x-vercel-forwarded-for'])?.split(',')[0]?.trim() ||
+    headerValue(headers['x-real-ip'])?.split(',')[0]?.trim() ||
+    headerValue(headers['x-forwarded-for'])?.split(',')[0]?.trim() ||
     'unknown'
   );
 }
@@ -131,36 +136,20 @@ function productionDeps(): ScanDeps {
   };
 }
 
-/** Vercel serverless entrypoint (Web Fetch handler). */
-export default async function handler(req: Request): Promise<Response> {
+/** Vercel serverless entrypoint (Node request/response handler). */
+export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   const deps = productionDeps();
   if (!deps.judgeKey) {
-    return new Response(JSON.stringify({ error: 'Judge not configured.' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    res.status(500).json({ error: 'Judge not configured.' });
+    return;
   }
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON.' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const result = await handleScan({ body, ip: clientIp(req), deps });
-  return new Response(JSON.stringify(result.body), {
-    status: result.status,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  // Vercel parses JSON bodies (application/json) into req.body; handleScan validates it.
+  const result = await handleScan({ body: req.body, ip: clientIp(req.headers), deps });
+  res.status(result.status).json(result.body);
 }
