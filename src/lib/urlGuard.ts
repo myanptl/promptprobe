@@ -1,24 +1,35 @@
+import ipaddr from 'ipaddr.js';
+
 /**
  * SSRF guard for user-supplied target endpoints. Rejects anything that isn't a
- * public HTTP(S) URL: blocks loopback, private, link-local, and metadata hosts
- * by literal. This does not defeat DNS rebinding (a public name resolving to a
- * private IP) — for that, combine with `redirect: 'manual'` and, ideally,
- * resolved-IP pinning at the network layer.
+ * public HTTP(S) URL: blocks loopback, private, link-local, unique-local,
+ * unspecified, reserved, and cloud-metadata hosts — including IPv4-mapped IPv6
+ * (`::ffff:a.b.c.d`) and the `::` wildcard.
+ *
+ * This does not defeat DNS rebinding (a public name resolving to a private IP).
+ * Combine with `redirect: 'manual'` and, ideally, resolved-IP pinning at the
+ * network layer for defense in depth.
  */
 
-const BLOCKED_HOSTNAMES = new Set(['localhost', '0.0.0.0', '[::1]', '::1']);
+// Only these IP ranges are treated as safe to reach.
+const SAFE_IPV4_RANGES = new Set(['unicast']);
+const SAFE_IPV6_RANGES = new Set(['unicast']);
 
-function isPrivateIpv4(host: string): boolean {
-  const m = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (!m) return false;
-  const [a, b] = [Number(m[1]), Number(m[2])];
-  if (a === 10) return true; // 10.0.0.0/8
-  if (a === 127) return true; // loopback
-  if (a === 169 && b === 254) return true; // link-local + cloud metadata
-  if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
-  if (a === 192 && b === 168) return true; // 192.168.0.0/16
-  if (a === 0) return true; // 0.0.0.0/8
-  return false;
+function isSafeIp(host: string): boolean {
+  if (!ipaddr.isValid(host)) return false;
+  let addr = ipaddr.parse(host);
+
+  // Collapse IPv4-mapped IPv6 (::ffff:1.2.3.4) down to the embedded IPv4.
+  if (addr.kind() === 'ipv6') {
+    const v6 = addr as ipaddr.IPv6;
+    if (v6.isIPv4MappedAddress()) {
+      addr = v6.toIPv4Address();
+    }
+  }
+
+  return addr.kind() === 'ipv4'
+    ? SAFE_IPV4_RANGES.has(addr.range())
+    : SAFE_IPV6_RANGES.has(addr.range());
 }
 
 export function isSafeTargetUrl(raw: string): boolean {
@@ -30,12 +41,17 @@ export function isSafeTargetUrl(raw: string): boolean {
   }
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
 
-  const host = url.hostname.toLowerCase();
-  if (BLOCKED_HOSTNAMES.has(host)) return false;
+  // url.hostname keeps brackets for IPv6 literals; strip them for parsing.
+  const host = url.hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  if (!host) return false;
+
+  // IP literal → validate its range.
+  if (ipaddr.isValid(host)) return isSafeIp(host);
+
+  // Hostname → block obvious internal names. (Public names that resolve to
+  // private IPs are out of scope here; see the module doc on DNS rebinding.)
+  if (host === 'localhost') return false;
   if (host.endsWith('.local') || host.endsWith('.internal')) return false;
-  if (isPrivateIpv4(host)) return false;
-  // IPv6 unique-local / link-local literals.
-  if (host.startsWith('fc') || host.startsWith('fd') || host.startsWith('fe80')) return false;
 
   return true;
 }

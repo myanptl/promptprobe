@@ -16,6 +16,7 @@
     "@anthropic-ai/sdk": "^0.110.0",
     "@supabase/supabase-js": "^2.110.0",
     "html-to-image": "^1.11.13",
+    "ipaddr.js": "^2.4.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "zod": "^4.4.3"

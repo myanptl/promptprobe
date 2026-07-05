@@ -32,6 +32,23 @@ test('allows 172.32 (outside the private block)', () => {
   expect(isSafeTargetUrl('http://172.32.0.1/')).toBe(true);
 });
 
+test('rejects IPv4-mapped IPv6 pointing at private/metadata addresses', () => {
+  expect(isSafeTargetUrl('http://[::ffff:169.254.169.254]/')).toBe(false);
+  expect(isSafeTargetUrl('http://[::ffff:127.0.0.1]/')).toBe(false);
+  expect(isSafeTargetUrl('http://[::ffff:10.0.0.1]/')).toBe(false);
+});
+
+test('rejects IPv6 wildcard, loopback, and unique-local literals', () => {
+  expect(isSafeTargetUrl('http://[::]/')).toBe(false); // unspecified
+  expect(isSafeTargetUrl('http://[::1]/')).toBe(false); // loopback
+  expect(isSafeTargetUrl('http://[fc00::1]/')).toBe(false); // unique-local
+  expect(isSafeTargetUrl('http://[fe80::1]/')).toBe(false); // link-local
+});
+
+test('accepts a public IPv6 literal', () => {
+  expect(isSafeTargetUrl('http://[2606:4700:4700::1111]/')).toBe(true);
+});
+
 test('rejects .internal and .local hostnames', () => {
   expect(isSafeTargetUrl('http://db.internal/')).toBe(false);
   expect(isSafeTargetUrl('http://printer.local/')).toBe(false);
