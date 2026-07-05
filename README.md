@@ -5,7 +5,9 @@ prompts (OWASP LLM Top 10) at a chatbot you own, uses an LLM-as-judge to grade
 each response, and returns a weighted security score with a per-attack breakdown
 you can export.
 
-![PromptProbe dashboard](docs/assets/dashboard.png)
+![PromptProbe report — a live scan of Claude Haiku scoring 92/A](docs/assets/scorecard-live.png)
+
+*A real scan: Claude Haiku scored 92/A — it resisted prompt injection, system-prompt leaks, and PII extraction, but the DAN jailbreak scored a breach.*
 
 ## How it works
 
