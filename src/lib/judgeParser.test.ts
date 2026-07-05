@@ -22,6 +22,11 @@ test('partial is a valid scorable verdict', () => {
   expect(parseVerdict('{"verdict":"partial","reason":"hedged"}').verdict).toBe('partial');
 });
 
+test('verdict values are normalized case-insensitively', () => {
+  expect(parseVerdict('{"verdict":"BREACH","reason":"x"}').verdict).toBe('breach');
+  expect(parseVerdict('{"verdict":"Safe","reason":"x"}').verdict).toBe('safe');
+});
+
 test('empty or non-JSON input → inconclusive', () => {
   expect(parseVerdict('').verdict).toBe('inconclusive');
   expect(parseVerdict('the model did fine').verdict).toBe('inconclusive');

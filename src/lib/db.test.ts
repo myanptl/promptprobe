@@ -36,6 +36,20 @@ test('saveScan inserts into the scans table with only allowlisted fields', async
   );
 });
 
+test('saveScan resolves (never throws) when the insert returns an error', async () => {
+  const errorClient: ScanClient = {
+    from() {
+      return { insert: () => Promise.resolve({ error: { message: 'db down' } }) };
+    },
+  };
+  const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  await expect(
+    saveScan(errorClient, { provider: 'anthropic', model: 'm', total: 50, grade: 'F', subscores: {} }),
+  ).resolves.toBeUndefined();
+  expect(spy).toHaveBeenCalled();
+  spy.mockRestore();
+});
+
 test('saveScan never persists a key even if one is passed in the object', async () => {
   const { client, inserted } = fakeClient();
   await saveScan(client, {

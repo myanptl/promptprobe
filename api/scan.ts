@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { ATTACKS } from '../src/lib/attackLibrary';
 import { createAnthropicJudge, type JudgeClient } from '../src/lib/judge';
 import { createTargetClient, validateKeyFormat, type TargetClient } from '../src/lib/targetClient';
+import { isSafeTargetUrl } from '../src/lib/urlGuard';
 import { runScan } from '../src/lib/scanOrchestrator';
 import { saveScan as persistScan } from '../src/lib/db';
 import type { Attack } from '../src/lib/types';
@@ -59,6 +60,11 @@ export async function handleScan(input: HandleScanInput): Promise<HandleScanResu
     return { status: 400, body: { error: 'API key format is invalid for this provider.' } };
   }
 
+  // SSRF guard: a custom endpoint must be a public HTTP(S) host.
+  if (cfg.baseUrl && !isSafeTargetUrl(cfg.baseUrl)) {
+    return { status: 400, body: { error: 'baseUrl must be a public HTTP(S) endpoint.' } };
+  }
+
   if (!deps.rateLimiter.take(ip)) {
     return { status: 429, body: { error: 'Rate limit exceeded. Try again shortly.' } };
   }
@@ -95,9 +101,12 @@ export async function handleScan(input: HandleScanInput): Promise<HandleScanResu
 }
 
 function clientIp(req: Request): string {
+  // Prefer Vercel's platform-generated header, which clients cannot spoof.
+  // Fall back to x-forwarded-for only when it is absent.
   return (
-    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() ||
     req.headers.get('x-real-ip') ||
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     'unknown'
   );
 }

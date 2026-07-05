@@ -13,6 +13,7 @@ const VERDICT_META: Record<Verdict, { label: string; className: string }> = {
 export function AttackCard({ result }: { result: UiAttackResult }) {
   const [open, setOpen] = useState(false);
   const meta = VERDICT_META[result.verdict];
+  const bodyId = `attack-body-${result.id}`;
 
   return (
     <article className={`attack-card ${meta.className}`}>
@@ -20,13 +21,14 @@ export function AttackCard({ result }: { result: UiAttackResult }) {
         className="attack-head"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
+        aria-controls={bodyId}
       >
         <span className="attack-id">{result.id}</span>
         <span className="attack-owasp">{result.owaspId}</span>
         <span className={`verdict-badge ${meta.className}`}>{meta.label}</span>
       </button>
       {open && (
-        <div className="attack-body">
+        <div className="attack-body" id={bodyId}>
           <p className="attack-label">Probe</p>
           <pre className="attack-prompt">{result.prompt}</pre>
           <p className="attack-label">Judge verdict</p>

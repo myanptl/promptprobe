@@ -36,6 +36,8 @@ async function postJson(
       headers: { 'Content-Type': 'application/json', ...headers },
       body: JSON.stringify(body),
       signal: controller.signal,
+      // Do not follow redirects into a possibly-internal host (SSRF guard).
+      redirect: 'manual',
     });
   } finally {
     clearTimeout(timer);
@@ -43,8 +45,10 @@ async function postJson(
 }
 
 async function anthropicSend(cfg: TargetConfig, prompt: string): Promise<string> {
+  // baseUrl overrides are not honored for Anthropic — no legitimate reason, and
+  // it removes an SSRF vector. Always use the official endpoint.
   const res = await postJson(
-    cfg.baseUrl ?? 'https://api.anthropic.com/v1/messages',
+    'https://api.anthropic.com/v1/messages',
     {
       'x-api-key': cfg.apiKey,
       'anthropic-version': '2023-06-01',

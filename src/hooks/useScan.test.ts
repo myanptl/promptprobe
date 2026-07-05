@@ -20,6 +20,27 @@ test('transitions idle → scanning → done on success', async () => {
   expect(result.current.result).toEqual(fakeResponse);
 });
 
+test('a stale scan does not overwrite a newer one', async () => {
+  // First call resolves slowly, second resolves fast; the fast (newer) one wins.
+  const slow: ScanResponse = { ...fakeResponse, score: { ...fakeResponse.score, total: 10 } };
+  const fast: ScanResponse = { ...fakeResponse, score: { ...fakeResponse.score, total: 90 } };
+  let resolveSlow!: (v: ScanResponse) => void;
+  const request = vi
+    .fn()
+    .mockImplementationOnce(() => new Promise<ScanResponse>((r) => (resolveSlow = r)))
+    .mockImplementationOnce(() => Promise.resolve(fast));
+
+  const { result } = renderHook(() => useScan(request));
+
+  await act(async () => {
+    void result.current.start({ provider: 'anthropic', apiKey: 'sk-ant-x', model: 'm' });
+    await result.current.start({ provider: 'anthropic', apiKey: 'sk-ant-x', model: 'm' });
+    resolveSlow(slow); // stale response arrives last
+  });
+
+  expect(result.current.result?.score.total).toBe(90);
+});
+
 test('captures a friendly error on failure', async () => {
   const request = vi.fn().mockRejectedValue(new Error('Rate limit exceeded.'));
   const { result } = renderHook(() => useScan(request));

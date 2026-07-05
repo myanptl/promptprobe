@@ -43,6 +43,15 @@ test('rate limit exceeded → 429', async () => {
   expect(second.status).toBe(429);
 });
 
+test('unsafe baseUrl (SSRF) → 400', async () => {
+  const res = await handleScan({
+    body: { ...goodBody, baseUrl: 'http://169.254.169.254/latest/meta-data/' },
+    ip: '3.3.3.3',
+    deps: baseDeps(),
+  });
+  expect(res.status).toBe(400);
+});
+
 test('happy path → 200 and body carries no apiKey', async () => {
   const deps = baseDeps();
   const res = await handleScan({ body: goodBody, ip: '2.2.2.2', deps });

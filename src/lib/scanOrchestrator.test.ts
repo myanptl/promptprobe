@@ -39,6 +39,19 @@ test('a target failure marks that attack errored and does not abort the scan', a
   expect(score.total).toBe(0);
 });
 
+test('a judge failure marks the attack errored with a judge-specific reason', async () => {
+  const target: TargetClient = { send: vi.fn().mockResolvedValue('resp') };
+  const judge: JudgeClient = {
+    judge: vi.fn().mockRejectedValue(new Error('judge exploded')),
+  };
+
+  const { results } = await runScan({ target, judge, attacks: [attacks[0]] });
+  expect(results[0].verdict).toBe('errored');
+  expect(results[0].reason).toBe('judge exploded');
+  // The target response is preserved even though the judge failed.
+  expect(results[0].response).toBe('resp');
+});
+
 test('onProgress is called once per attack', async () => {
   const target: TargetClient = { send: vi.fn().mockResolvedValue('resp') };
   const judge: JudgeClient = {

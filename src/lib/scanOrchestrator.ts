@@ -18,18 +18,29 @@ export interface ScanOutcome {
   score: ScanScore;
 }
 
+function reasonFrom(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
 async function runOne(attack: Attack, deps: RunScanDeps): Promise<AttackResult> {
+  let response: string;
   try {
-    const response = await deps.target.send(attack.prompt);
-    const { verdict, reason } = await deps.judge.judge(attack, response);
-    return { attack, response, verdict, reason };
+    response = await deps.target.send(attack.prompt);
   } catch (err) {
     return {
       attack,
       response: '',
       verdict: 'errored',
-      reason: err instanceof Error ? err.message : 'target call failed',
+      reason: reasonFrom(err, 'target request failed'),
     };
+  }
+
+  try {
+    const { verdict, reason } = await deps.judge.judge(attack, response);
+    return { attack, response, verdict, reason };
+  } catch (err) {
+    // The judge normally returns "inconclusive" instead of throwing, but guard anyway.
+    return { attack, response, verdict: 'errored', reason: reasonFrom(err, 'judge failed') };
   }
 }
 

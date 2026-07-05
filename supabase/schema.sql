@@ -34,6 +34,14 @@ alter table public.scans   enable row level security;
 create policy attacks_read_anon on public.attacks
   for select using (true);
 
--- Anyone may insert a scan result; nobody may read others' rows via anon.
+-- Anyone may insert a scan result, but only well-shaped rows; nobody may read
+-- others' rows via anon (no select policy = deny). Defense-in-depth in case an
+-- anon key is ever exposed to the client — the table CHECK constraints already
+-- enforce ranges, and this mirrors them at the policy layer.
 create policy scans_insert_anon on public.scans
-  for insert with check (true);
+  for insert with check (
+    total_score between 0 and 100
+    and grade in ('A','B','C','D','F')
+    and length(provider) between 1 and 64
+    and length(model) between 1 and 128
+  );
