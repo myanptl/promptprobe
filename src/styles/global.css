@@ -1,0 +1,16 @@
+:root {
+  color-scheme: dark;
+  --bg: oklch(16% 0.02 265);
+  --text: oklch(96% 0.01 265);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
