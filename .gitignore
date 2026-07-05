@@ -4,3 +4,7 @@ node_modules
 dist
 .vercel
 coverage
+
+e2e/__screenshots__/
+test-results/
+playwright-report/

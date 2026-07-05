@@ -46,3 +46,6 @@
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/src/styles/global.css","timestamp":1783225646781}
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/public/shield.svg","timestamp":1783225658179}
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/tsconfig.json","timestamp":1783225673559}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/playwright.config.ts","timestamp":1783225702594}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/e2e/scan.spec.ts","timestamp":1783225714517}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/e2e/capture.spec.ts","timestamp":1783225766877}
