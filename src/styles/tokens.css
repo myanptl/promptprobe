@@ -1,0 +1,100 @@
+:root {
+  color-scheme: dark;
+
+  /* ── Palette — a red-team console: near-black panels, phosphor-cyan probe
+     accent (the single disciplined accent), semantic grade colours untouched. */
+  --bg: oklch(12% 0.014 255);
+  --bg-elevated: oklch(16% 0.018 255);
+  --bg-sunken: oklch(9% 0.012 255);
+  --bg-panel: oklch(14% 0.016 255);
+
+  --border: oklch(27% 0.02 255);
+  --border-bright: oklch(40% 0.03 255);
+
+  --text: oklch(95% 0.008 255);
+  --text-dim: oklch(71% 0.014 255);
+  --text-faint: oklch(53% 0.015 255);
+
+  /* Phosphor-cyan probe accent — used for chrome, focus, active probes only. */
+  --accent: oklch(80% 0.13 195);
+  --accent-deep: oklch(66% 0.13 200);
+  --accent-glow: oklch(80% 0.13 195 / 0.22);
+
+  /* Warm alert red — atmosphere + "armed" cues only. Never a grade colour. */
+  --alert: oklch(66% 0.2 25);
+  /* retire the old purple: hot now means armed */
+  --accent-hot: var(--alert);
+
+  /* Semantic grade / verdict colours (A→F, safe→breach). Do not repurpose. */
+  --good: oklch(74% 0.16 150);
+  --warn: oklch(82% 0.14 85);
+  --bad: oklch(64% 0.21 25);
+
+  --text-hero: clamp(2.75rem, 0.5rem + 9vw, 6rem);
+  --space-section: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur: 260ms;
+
+  --font-display: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', Menlo,
+    Consolas, monospace;
+
+  font-family: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    /* faint warm alert wash, top-right — the console is "armed" */
+    radial-gradient(1000px 560px at 88% -12%, oklch(40% 0.14 25 / 0.14), transparent 58%),
+    /* cool probe wash, top-left */
+    radial-gradient(880px 520px at 4% -6%, oklch(46% 0.1 210 / 0.16), transparent 60%),
+    /* hairline console grid */
+    repeating-linear-gradient(0deg, oklch(100% 0 0 / 0.014) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, oklch(100% 0 0 / 0.014) 0 1px, transparent 1px 44px),
+    var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Shared keyframes ─────────────────────────────────────────── */
+@keyframes sweep {
+  0% { background-position: -40% 0; }
+  100% { background-position: 140% 0; }
+}
+@keyframes blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+@keyframes line-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
