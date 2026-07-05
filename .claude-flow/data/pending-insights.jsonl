@@ -26,3 +26,7 @@
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/src/lib/db.test.ts","timestamp":1783225330877}
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/src/lib/db.ts","timestamp":1783225342910}
 {"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/supabase/schema.sql","timestamp":1783225351510}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/src/lib/rateLimit.ts","timestamp":1783225372017}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/api/scan.test.ts","timestamp":1783225389794}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/api/scan.ts","timestamp":1783225416947}
+{"type":"edit","file":"/Users/myanpatel/workspace/promptprobe/src/lib/rateLimit.test.ts","timestamp":1783225427103}
