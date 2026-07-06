@@ -3,22 +3,22 @@
 
   /* ── Palette — a red-team console: near-black panels, phosphor-cyan probe
      accent (the single disciplined accent), semantic grade colours untouched. */
-  --bg: oklch(12% 0.014 255);
-  --bg-elevated: oklch(16% 0.018 255);
-  --bg-sunken: oklch(9% 0.012 255);
-  --bg-panel: oklch(14% 0.016 255);
+  --bg: oklch(12% 0.012 55);
+  --bg-elevated: oklch(16% 0.016 55);
+  --bg-sunken: oklch(9% 0.01 55);
+  --bg-panel: oklch(14% 0.014 55);
 
-  --border: oklch(27% 0.02 255);
-  --border-bright: oklch(40% 0.03 255);
+  --border: oklch(27% 0.024 60);
+  --border-bright: oklch(40% 0.035 60);
 
-  --text: oklch(95% 0.008 255);
-  --text-dim: oklch(71% 0.014 255);
-  --text-faint: oklch(53% 0.015 255);
+  --text: oklch(95% 0.008 75);
+  --text-dim: oklch(72% 0.02 70);
+  --text-faint: oklch(54% 0.022 65);
 
-  /* Phosphor-cyan probe accent — used for chrome, focus, active probes only. */
-  --accent: oklch(80% 0.13 195);
-  --accent-deep: oklch(66% 0.13 200);
-  --accent-glow: oklch(80% 0.13 195 / 0.22);
+  /* Heat-amber probe accent — used for chrome, focus, active probes only. */
+  --accent: oklch(82% 0.15 80);
+  --accent-deep: oklch(68% 0.15 70);
+  --accent-glow: oklch(82% 0.15 80 / 0.22);
 
   /* Warm alert red — atmosphere + "armed" cues only. Never a grade colour. */
   --alert: oklch(66% 0.2 25);
@@ -57,7 +57,7 @@ body {
     /* faint warm alert wash, top-right — the console is "armed" */
     radial-gradient(1000px 560px at 88% -12%, oklch(40% 0.14 25 / 0.14), transparent 58%),
     /* cool probe wash, top-left */
-    radial-gradient(880px 520px at 4% -6%, oklch(46% 0.1 210 / 0.16), transparent 60%),
+    radial-gradient(880px 520px at 4% -6%, oklch(52% 0.1 80 / 0.15), transparent 60%),
     /* hairline console grid */
     repeating-linear-gradient(0deg, oklch(100% 0 0 / 0.014) 0 1px, transparent 1px 44px),
     repeating-linear-gradient(90deg, oklch(100% 0 0 / 0.014) 0 1px, transparent 1px 44px),
