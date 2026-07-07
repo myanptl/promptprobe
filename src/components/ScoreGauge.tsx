@@ -6,11 +6,11 @@ interface ScoreGaugeProps {
 }
 
 const GRADE_COLOR: Record<Grade, string> = {
-  A: 'oklch(72% 0.17 150)',
-  B: 'oklch(75% 0.15 130)',
-  C: 'oklch(80% 0.15 90)',
-  D: 'oklch(72% 0.16 55)',
-  F: 'oklch(63% 0.2 25)',
+  A: '#6f9f74',
+  B: '#84a06e',
+  C: '#c9a86a',
+  D: '#c48a63',
+  F: '#c76b63',
 };
 
 /** Radial gauge that reads as a security grade, not a generic progress ring. */

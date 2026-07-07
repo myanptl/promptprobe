@@ -1,122 +1,92 @@
-:root {
-  color-scheme: dark;
-
-  /* Palette — deep console blue with an electric probe accent */
-  --bg: oklch(15% 0.03 265);
-  --bg-elevated: oklch(20% 0.035 265);
-  --bg-sunken: oklch(12% 0.025 265);
-  --border: oklch(32% 0.03 265);
-  --border-bright: oklch(45% 0.05 265);
-  --text: oklch(96% 0.01 265);
-  --text-dim: oklch(72% 0.02 265);
-  --text-faint: oklch(58% 0.02 265);
-  --accent: oklch(72% 0.16 200);
-  --accent-hot: oklch(70% 0.2 320);
-
-  --good: oklch(72% 0.17 150);
-  --warn: oklch(80% 0.15 90);
-  --bad: oklch(64% 0.21 25);
-
-  --text-hero: clamp(2.75rem, 1rem + 8vw, 5.5rem);
-  --space-section: clamp(2.5rem, 1.5rem + 4vw, 5rem);
-  --radius: 14px;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(1100px 620px at 82% -8%, oklch(28% 0.08 320 / 0.28), transparent 60%),
-    radial-gradient(900px 560px at 6% 4%, oklch(28% 0.08 210 / 0.22), transparent 62%),
-    var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-}
+/* Palette lives in tokens.css (imported last). Component styling only,
+   routed through the minimal tokens. Colour appears only on verdicts. */
 
 .app-shell {
-  max-width: 1040px;
+  max-width: 940px;
   margin: 0 auto;
-  padding: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(1.25rem, 0.5rem + 3vw, 3rem) 3rem;
+  padding: clamp(2.5rem, 1.5rem + 5vw, 6rem) clamp(1.25rem, 0.5rem + 3vw, 3rem) 3rem;
 }
 
-/* ── Masthead ─────────────────────────────────────────────── */
+/* ── Masthead ─────────────────────────────────────────────────── */
 .masthead {
   margin-bottom: var(--space-section);
 }
 .eyebrow {
-  margin: 0 0 1rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
+  margin: 0 0 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7ch;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--text-faint);
+}
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  animation: pulse-dot 2.4s var(--ease) infinite;
 }
 .masthead h1 {
   margin: 0;
+  font-family: var(--font-display);
   font-size: var(--text-hero);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  background: linear-gradient(180deg, var(--text), oklch(78% 0.05 265));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  color: var(--text);
 }
 .tagline {
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   max-width: 46ch;
   color: var(--text-dim);
   font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
-/* ── Form ─────────────────────────────────────────────────── */
+/* ── Form ─────────────────────────────────────────────────────── */
 .stage {
   min-height: 320px;
 }
 .key-form {
   display: grid;
   gap: 1.35rem;
-  max-width: 520px;
-  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  background: linear-gradient(180deg, var(--bg-elevated), var(--bg-sunken));
+  max-width: 480px;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 30px 60px -30px oklch(0% 0 0 / 0.7);
 }
 .field {
   display: grid;
   gap: 0.5rem;
 }
 .field label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  letter-spacing: 0.01em;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 .field input,
 .field select {
   padding: 0.7rem 0.85rem;
   background: var(--bg-sunken);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   color: var(--text);
   font: inherit;
   font-size: 0.95rem;
-  transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease);
+  transition: border-color 150ms var(--ease);
 }
 .field input:focus,
 .field select:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px oklch(72% 0.16 200 / 0.2);
+  border-color: var(--border-bright);
 }
 .field input[aria-invalid='true'] {
   border-color: var(--bad);
@@ -129,23 +99,22 @@ body {
 .scan-button {
   margin-top: 0.25rem;
   padding: 0.85rem 1rem;
-  font: inherit;
-  font-weight: 700;
-  font-size: 1rem;
-  color: oklch(15% 0.03 265);
-  background: linear-gradient(180deg, var(--accent), oklch(64% 0.16 205));
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #0b0b0d;
+  background: var(--text);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: transform 150ms var(--ease), box-shadow 150ms var(--ease), filter 150ms var(--ease);
+  transition: transform 150ms var(--ease), opacity 150ms var(--ease);
 }
 .scan-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px -12px oklch(72% 0.16 200 / 0.6);
-  filter: brightness(1.05);
+  opacity: 0.9;
 }
 .scan-button:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 .disclaimer {
@@ -155,7 +124,7 @@ body {
   text-align: center;
 }
 
-/* ── Progress ─────────────────────────────────────────────── */
+/* ── Progress ─────────────────────────────────────────────────── */
 .scan-progress {
   display: grid;
   gap: 1.25rem;
@@ -165,23 +134,19 @@ body {
   color: var(--text-dim);
 }
 .sweep {
-  width: min(420px, 80vw);
-  height: 4px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-hot), transparent);
+  width: min(360px, 80vw);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--text-dim), transparent);
   background-size: 40% 100%;
   background-repeat: no-repeat;
   animation: sweep 1.15s var(--ease) infinite;
-}
-@keyframes sweep {
-  0% { background-position: -40% 0; }
-  100% { background-position: 140% 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sweep { animation: none; background-position: 50% 0; }
 }
 
-/* ── Results ──────────────────────────────────────────────── */
+/* ── Results ──────────────────────────────────────────────────── */
 .results {
   display: grid;
   gap: 1.5rem;
@@ -192,10 +157,8 @@ body {
   gap: clamp(1.25rem, 1rem + 2vw, 2.5rem);
   align-items: center;
   padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  background:
-    radial-gradient(600px 300px at 100% 0%, oklch(28% 0.09 320 / 0.25), transparent 60%),
-    linear-gradient(180deg, var(--bg-elevated), var(--bg-sunken));
-  border: 1px solid var(--border-bright);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
 }
 .score-gauge svg {
@@ -204,23 +167,25 @@ body {
 }
 .gauge-track {
   fill: none;
-  stroke: var(--border);
-  stroke-width: 14;
+  stroke: var(--border-bright);
+  stroke-width: 12;
 }
 .gauge-fill {
   fill: none;
-  stroke-width: 14;
+  stroke-width: 12;
   stroke-linecap: round;
   transition: stroke-dasharray 900ms var(--ease);
 }
 .gauge-grade {
+  font-family: var(--font-display);
   font-size: 68px;
-  font-weight: 800;
+  font-weight: 700;
   text-anchor: middle;
 }
 .gauge-number {
+  font-family: var(--font-mono);
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 500;
   text-anchor: middle;
   fill: var(--text-dim);
 }
@@ -230,8 +195,10 @@ body {
 }
 .scorecard-meta h2 {
   margin: 0 0 1rem;
-  font-size: 1.1rem;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 .subscores {
   display: grid;
@@ -245,11 +212,16 @@ body {
   padding: 0.65rem 0.8rem;
   background: var(--bg-sunken);
   border: 1px solid var(--border);
-  border-left-width: 3px;
-  border-radius: 8px;
+  border-left-width: 2px;
+  border-radius: var(--radius-sm);
 }
 .subscore-label { font-size: 0.8rem; color: var(--text-dim); }
-.subscore-value { font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.subscore-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
 .sub-good { border-left-color: var(--good); }
 .sub-warn { border-left-color: var(--warn); }
 .sub-bad { border-left-color: var(--bad); }
@@ -257,8 +229,9 @@ body {
 .scorecard-brand {
   grid-column: 1 / -1;
   margin: 1rem 0 0;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -271,17 +244,17 @@ body {
 .results-actions button {
   padding: 0.6rem 1.1rem;
   font: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9rem;
   color: var(--text);
   background: var(--bg-elevated);
-  border: 1px solid var(--border-bright);
-  border-radius: 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 150ms var(--ease), transform 150ms var(--ease);
 }
 .results-actions button:hover {
-  border-color: var(--accent);
+  border-color: var(--border-bright);
   transform: translateY(-1px);
 }
 .results-actions .ghost {
@@ -290,7 +263,7 @@ body {
   background: transparent;
 }
 
-/* ── Attack list ──────────────────────────────────────────── */
+/* ── Attack list ──────────────────────────────────────────────── */
 .attack-list {
   display: grid;
   gap: 0.6rem;
@@ -298,8 +271,8 @@ body {
 .attack-card {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-left-width: 3px;
-  border-radius: 10px;
+  border-left-width: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 .attack-card.verdict-breach { border-left-color: var(--bad); }
@@ -321,26 +294,30 @@ body {
   text-align: left;
   transition: background 150ms var(--ease);
 }
-.attack-head:hover { background: oklch(24% 0.035 265); }
-.attack-id { font-family: ui-monospace, 'SF Mono', monospace; font-size: 0.85rem; color: var(--text-dim); }
-.attack-owasp { font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.05em; }
+.attack-head:hover { background: var(--bg-panel); }
+.attack-id { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-dim); }
+.attack-owasp { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.05em; }
 .verdict-badge {
   padding: 0.2rem 0.6rem;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
   border-radius: 999px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
 }
-.verdict-badge.verdict-breach { background: oklch(64% 0.21 25 / 0.18); color: var(--bad); }
-.verdict-badge.verdict-partial { background: oklch(80% 0.15 90 / 0.16); color: var(--warn); }
-.verdict-badge.verdict-safe { background: oklch(72% 0.17 150 / 0.16); color: var(--good); }
-.verdict-badge.verdict-neutral { background: oklch(45% 0.05 265 / 0.25); color: var(--text-dim); }
+.verdict-badge.verdict-breach { color: var(--bad); }
+.verdict-badge.verdict-partial { color: var(--warn); }
+.verdict-badge.verdict-safe { color: var(--good); }
+.verdict-badge.verdict-neutral { color: var(--text-dim); }
 .attack-body {
   padding: 0 1rem 1rem;
   border-top: 1px solid var(--border);
 }
 .attack-label {
   margin: 1rem 0 0.35rem;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -350,8 +327,8 @@ body {
   margin: 0;
   padding: 0.75rem;
   background: var(--bg-sunken);
-  border-radius: 8px;
-  font-family: ui-monospace, 'SF Mono', monospace;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--text-dim);
   white-space: pre-wrap;
@@ -359,7 +336,7 @@ body {
 }
 .attack-reason { margin: 0; color: var(--text); line-height: 1.5; }
 
-/* ── Error + footer ───────────────────────────────────────── */
+/* ── Error + footer ───────────────────────────────────────────── */
 .scan-error {
   display: grid;
   gap: 1rem;
@@ -371,11 +348,11 @@ body {
 .scan-error button {
   padding: 0.6rem 1.2rem;
   font: inherit;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text);
   background: var(--bg-elevated);
-  border: 1px solid var(--border-bright);
-  border-radius: 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 .site-footer {
@@ -385,7 +362,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
   color: var(--text-faint);
 }
 

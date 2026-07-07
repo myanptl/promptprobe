@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="masthead">
-        <p className="eyebrow">OWASP LLM Top 10 · red-team in one click</p>
+        <p className="eyebrow">OWASP LLM Top 10 · one-click red team</p>
         <h1>PromptProbe</h1>
         <p className="tagline">
           Point it at your chatbot. It fires {ATTACKS.length} adversarial probes, an AI judge
