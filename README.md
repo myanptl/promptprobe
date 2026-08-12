@@ -1,5 +1,7 @@
 # PromptProbe
 
+[![PromptProbe](docs/screenshot.jpeg)](https://promptprobe.vercel.app)
+
 **Red-team your chatbot in one scan.** PromptProbe fires a battery of adversarial
 prompts (OWASP LLM Top 10) at a chatbot you own, uses an LLM-as-judge to grade
 each response, and returns a weighted security score with a per-attack breakdown
