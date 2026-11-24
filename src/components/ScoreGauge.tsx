@@ -6,16 +6,16 @@ interface ScoreGaugeProps {
 }
 
 const GRADE_COLOR: Record<Grade, string> = {
-  A: '#6f9f74',
-  B: '#84a06e',
-  C: '#c9a86a',
-  D: '#c48a63',
-  F: '#c76b63',
+  A: 'var(--good)',
+  B: 'var(--good)',
+  C: 'var(--warn)',
+  D: 'var(--warn)',
+  F: 'var(--bad)',
 };
 
 /** Radial gauge that reads as a security grade, not a generic progress ring. */
 export function ScoreGauge({ total, grade }: ScoreGaugeProps) {
-  const radius = 84;
+  const radius = 86;
   const circumference = 2 * Math.PI * radius;
   const dash = (total / 100) * circumference;
   const color = GRADE_COLOR[grade];
@@ -29,11 +29,11 @@ export function ScoreGauge({ total, grade }: ScoreGaugeProps) {
           cy="100"
           r={radius}
           className="gauge-fill"
-          stroke={color}
+          style={{ stroke: color }}
           strokeDasharray={`${dash} ${circumference}`}
           transform="rotate(-90 100 100)"
         />
-        <text x="100" y="92" className="gauge-grade" fill={color}>
+        <text x="100" y="92" className="gauge-grade" style={{ fill: color }}>
           {grade}
         </text>
         <text x="100" y="126" className="gauge-number">

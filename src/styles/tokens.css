@@ -1,82 +1,56 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ══ Minimal console ═══════════════════════════════════════════
-     Restrained to the point of severity. Neutral near-black, one
-     off-white ink, hairline structure. Colour appears ONLY where it
-     carries meaning — the verdict/grade scale — and never as decoration. */
-  --bg: #0b0b0d;
-  --bg-elevated: #101013;
-  --bg-sunken: #08080a;
-  --bg-panel: #131317;
+  /* ══ Paper-white + magenta ══════════════════════════════════════
+     PromptProbe produces a scorecard people screenshot and share, so
+     it lives in daylight: a true near-white (no cream), ink-black text,
+     and one magenta accent for action and the probe in flight.
+     Green / amber / red are reserved for verdicts only. */
+  --bg: oklch(0.985 0.002 345);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.965 0.004 345);
+  --line: oklch(0.9 0.006 345);
+  --line-strong: oklch(0.82 0.008 345);
 
-  --border: rgba(255, 255, 255, 0.08);
-  --border-bright: rgba(255, 255, 255, 0.16);
+  --ink: oklch(0.2 0.01 345);
+  --ink-2: oklch(0.42 0.012 345);
+  --ink-3: oklch(0.52 0.012 345);
 
-  --text: #f3f3f4;
-  --text-dim: #a2a2a9;
-  --text-faint: #66666e;
+  --accent: oklch(0.55 0.21 350);
+  --accent-ink: oklch(0.99 0 0);
+  --accent-soft: oklch(0.55 0.21 350 / 0.1);
 
-  /* The only "accent" is the ink itself — interactive states use white. */
-  --accent: #f3f3f4;
-  --accent-glow: rgba(255, 255, 255, 0.14);
+  --good: oklch(0.55 0.13 150);
+  --warn: oklch(0.64 0.14 70);
+  --bad: oklch(0.56 0.2 27);
 
-  /* Semantic verdict / grade colours — the one place colour is allowed,
-     kept low-chroma so they read as signal, not decoration. */
-  --good: #6f9f74;
-  --warn: #c9a86a;
-  --bad: #c76b63;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --text-hero: clamp(2.75rem, 0.5rem + 8.5vw, 5.75rem);
-  --space-section: clamp(2.5rem, 1.5rem + 4vw, 5rem);
-  --radius: 10px;
-  --radius-sm: 7px;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 140ms;
-  --dur: 260ms;
+  --r: 8px;
+  --r-sm: 5px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --t1: 140ms;
+  --t2: 240ms;
+  --z-sticky: 10;
 
-  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
 }
 
-* {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* ── Shared keyframes ─────────────────────────────────────────── */
-@keyframes sweep {
-  0% { background-position: -40% 0; }
-  100% { background-position: 140% 0; }
-}
-@keyframes blink {
-  0%, 55% { opacity: 1; }
-  56%, 100% { opacity: 0; }
-}
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;

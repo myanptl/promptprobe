@@ -26,7 +26,7 @@ export function ResultsDashboard({ response, onReset }: ResultsDashboardProps) {
       <div className="scorecard" ref={cardRef}>
         <ScoreGauge total={score.total} grade={score.grade} />
         <div className="scorecard-meta">
-          <h2>Security score</h2>
+          <h2>Score by category</h2>
           <div className="subscores">
             {CATEGORIES.map((cat) => {
               const value = score.subscores[cat];
@@ -34,12 +34,15 @@ export function ResultsDashboard({ response, onReset }: ResultsDashboardProps) {
                 <div key={cat} className={`subscore ${subscoreClass(value)}`}>
                   <span className="subscore-label">{CATEGORY_LABELS[cat]}</span>
                   <span className="subscore-value">{value === null ? 'n/a' : value}</span>
+                  <span className="meter" aria-hidden="true">
+                    <i style={{ '--v': value ?? 0 } as React.CSSProperties} />
+                  </span>
                 </div>
               );
             })}
           </div>
-          <p className="scorecard-brand">PromptProbe · LLM security scan</p>
         </div>
+        <p className="scorecard-brand"><span>PromptProbe</span><span>{results.length} probes · OWASP LLM Top 10</span></p>
       </div>
 
       <div className="results-actions">
@@ -52,11 +55,17 @@ export function ResultsDashboard({ response, onReset }: ResultsDashboardProps) {
         </button>
       </div>
 
-      <div className="attack-list">
-        {results.map((r) => (
-          <AttackCard key={r.id} result={r} />
-        ))}
-      </div>
+      <section className="panel" aria-label="Every probe">
+        <div className="panel-head">
+          Every probe
+          <span className="end">{results.filter((r) => r.verdict === 'breach').length} breached</span>
+        </div>
+        <div className="attack-list">
+          {results.map((r) => (
+            <AttackCard key={r.id} result={r} />
+          ))}
+        </div>
+      </section>
     </section>
   );
 }

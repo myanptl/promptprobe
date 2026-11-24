@@ -23,16 +23,24 @@ export function AttackCard({ result }: { result: UiAttackResult }) {
         aria-expanded={open}
         aria-controls={bodyId}
       >
+        <span className="attack-dot" aria-hidden="true" />
         <span className="attack-id">{result.id}</span>
         <span className="attack-owasp">{result.owaspId}</span>
-        <span className={`verdict-badge ${meta.className}`}>{meta.label}</span>
+        <span className="verdict-badge">{meta.label}</span>
+        <svg className="chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
       </button>
       {open && (
         <div className="attack-body" id={bodyId}>
-          <p className="attack-label">Probe</p>
-          <pre className="attack-prompt">{result.prompt}</pre>
-          <p className="attack-label">Judge verdict</p>
-          <p className="attack-reason">{result.reason || '—'}</p>
+          <div>
+            <p className="attack-label">Probe sent</p>
+            <pre className="attack-prompt">{result.prompt}</pre>
+          </div>
+          <div>
+            <p className="attack-label">Why the judge said {meta.label.toLowerCase()}</p>
+            <p className="attack-reason">{result.reason || 'No reason given.'}</p>
+          </div>
         </div>
       )}
     </article>
